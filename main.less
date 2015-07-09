@@ -1,0 +1,29 @@
+@dimension:600px;
+
+@time: 5s;
+
+body {
+  background-color: grey;
+}
+
+.back {
+  background-color: white;
+  width: @dimension;
+  height: @dimension;
+  position: relative;
+}
+
+.container {
+  width: @dimension;
+  height: @dimension;
+  animation: container-spin @time ease 0s infinite;
+
+  div {
+    background-color: black;
+    width: @dimension/12;
+    height: @dimension/12;
+    position: absolute;
+    left:@dimension /3;
+    top: @dimension/3;
+  }
+}

@@ -1,0 +1,22 @@
+body {
+  background-color: grey;
+}
+.back {
+  background-color: white;
+  width: 600px;
+  height: 600px;
+  position: relative;
+}
+.container {
+  width: 600px;
+  height: 600px;
+  animation: container-spin 5s ease 0s infinite;
+}
+.container div {
+  background-color: black;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 200px;
+  top: 200px;
+}
