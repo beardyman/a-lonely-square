@@ -1,6 +1,8 @@
 @dimension:600px;
-
 @time: 5s;
+@break-down: 4;
+@square-dimension: @dimension / 3;
+@piece-dimension: @square-dimension / @break-down;
 
 body {
   background-color: grey;
@@ -13,17 +15,69 @@ body {
   position: relative;
 }
 
-.container {
-  width: @dimension;
-  height: @dimension;
-  animation: container-spin @time ease 0s infinite;
-
-  div {
-    background-color: black;
-    width: @dimension/12;
-    height: @dimension/12;
-    position: absolute;
-    left:@dimension /3;
-    top: @dimension/3;
-  }
+.container div {
+  background-color: black;
+  width: @dimension/@break-down/3;
+  height: @dimension/@break-down/3;
+  position: absolute;
 }
+
+.hloop(@i) when (@i <= @break-down) {
+  .vloop(@j) when (@j <= @break-down) {
+    @move: escape("move-@{i}-@{j}");
+    @child: ((@i - 1) * @break-down) + @j;
+
+    .back .container div:nth-child(@{child}) {
+      animation: @move @time ease 0s infinite;
+      left: @square-dimension + (@i - 1) * @piece-dimension;
+      top: @square-dimension + (@j - 1) * @piece-dimension;
+      -webkit-filter: hue-rotate(135deg + (@i * @j * 12));
+    }
+
+    @keyframes @move {
+      0% {
+        left: @square-dimension + (@i - 1) * @piece-dimension;
+        top: @square-dimension + (@j - 1) * @piece-dimension;
+      }
+
+      20% {
+        left: @square-dimension + (@i - 1) * @piece-dimension;
+        top: @square-dimension + (@j - 1) * @piece-dimension;
+        background: black;
+      }
+
+      30% {
+        background: hsla(300, 50%, 50%, 1);
+        left:  (@square-dimension + (@i - 1) * @piece-dimension) + cos(@i - 1) * @dimension/2;
+        top: (@square-dimension + (@j - 1) * @piece-dimension) + cos(@j - 1) * @dimension/2;
+      }
+
+      45% {
+        left: @square-dimension - (cos(@i - 1) * (@dimension/2 - @piece-dimension * 1.5)) + @piece-dimension * 1.5;
+        top: @square-dimension - (cos(@j - 1) * (@dimension/2 - @piece-dimension * 1.5)) + @piece-dimension * 1.5;
+        opacity: 0.5;
+      }
+
+      60% {
+        left: (@square-dimension + (@i - 1) * @piece-dimension) + cos(@i - 1) * @dimension/2;
+        top: (@square-dimension + (@j - 1) * @piece-dimension) + cos(@j - 1) * @dimension/2;
+      }
+
+      80% {
+        background: hsla(300, 50%, 50%, 1);
+      }
+
+      100% {
+        left: @square-dimension + (@i - 1) * @piece-dimension;
+        top: @square-dimension + (@j - 1) * @piece-dimension;
+
+      }
+    }
+
+
+    .vloop((@j + 1));
+  }
+  .vloop(1);
+  .hloop((@i + 1));
+}
+.hloop(1);
